@@ -1,3 +1,5 @@
+[core]
+  filemode = false
 [user]
   name = Julian Xhokaxhiu
   email = info@julianxhokaxhiu.com
