@@ -7,3 +7,4 @@
   rebase = true
 [alias]
   cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"
+  deepclean = "git clean -fxd"
