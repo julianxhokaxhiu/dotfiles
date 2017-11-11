@@ -88,3 +88,12 @@ source <(npx --shell-auto-fallback zsh)
 alias pacman_clean_orphans="sudo pacman -Rns $(pacman -Qtdq)"
 # https://wiki.archlinux.org/index.php/Pacman/Tips_and_tricks#Database_access_speeds + AUR via apacman
 alias pacman_clean_cache="sudo pacman -Sc && sudo pacman-optimize && sudo pacman -Sc --cachedir=/var/cache/apacman/pkg"
+
+# Kubernetes
+############
+# KubeCtl
+source <(kubectl completion zsh)
+# KubeAdm
+source <(kubeadm completion zsh)
+# Helm Package Manager
+source <(helm completion zsh)
