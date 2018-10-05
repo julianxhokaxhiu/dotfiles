@@ -1,5 +1,19 @@
 # ~/.zshrc
 
+# Load history file
+HISTFILE="~/.zsh_history"
+
+# Load zsh compinit module
+autoload -Uz compinit
+if [ ! -f "~/.zcompdump" ] || [ $(date +'%j') != $(date -r ~/.zcompdump +'%j') ]; then
+  compinit
+else
+  compinit -C
+fi
+
+# Enable Tab highlight style
+zstyle ':completion:*' menu select
+
 # User configuration
 
 # You may need to manually set your language environment
