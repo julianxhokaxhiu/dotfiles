@@ -9,3 +9,6 @@ zsh-users/zsh-autosuggestions
 
 # Autocompletitions for various binaries
 zsh-users/zsh-completions
+
+# Better history search
+zsh-users/zsh-history-substring-search
