@@ -1,7 +1,41 @@
 # ~/.zshrc
 
-# Load history file
-HISTFILE="~/.zsh_history"
+# history
+##########
+
+# not history command prefixed with space
+setopt hist_ignore_space
+
+# no history history command
+setopt hist_no_store
+
+# history file
+HISTFILE="${HOME}/.zsh_history"
+
+# history file size
+HISTSIZE=40000
+
+# saveする量
+SAVEHIST=40000
+
+# no memory duplicate history
+setopt hist_ignore_dups
+setopt hist_ignore_all_dups
+
+# delete unnececally space
+setopt hist_reduce_blanks
+
+# share history file
+setopt share_history
+
+# history zsh start and end
+setopt EXTENDED_HISTORY
+
+# append history file
+setopt append_history
+
+# compinit
+###########
 
 # Load zsh compinit module
 autoload -Uz compinit
@@ -40,6 +74,16 @@ source <(antibody init)
 
 # Load zsh plugins
 antibody bundle < ~/.zsh_plugins
+
+# zsh-users/zsh-history-substring-search
+########################################
+
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search # Up
+bindkey "^[[B" down-line-or-beginning-search # Down
 
 # NPM without sudo
 ##################
