@@ -6,3 +6,6 @@ zsh-users/zsh-syntax-highlighting
 
 # Autosuggestions
 zsh-users/zsh-autosuggestions
+
+# Autocompletitions for various binaries
+zsh-users/zsh-completions
