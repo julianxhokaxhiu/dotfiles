@@ -39,7 +39,10 @@ setopt append_history
 
 # Load zsh compinit module
 autoload -Uz compinit
-if [ ! -f "~/.zcompdump" ] || [ $(date +'%j') != $(date -r ~/.zcompdump +'%j') ]; then
+if [ ! -f ~/.zcompdump ]; then
+  compinit
+elif [ $(date +'%j') != $(date -r ~/.zcompdump +'%j') ]; then
+  rm ~/.zcompdump
   compinit
 else
   compinit -C
