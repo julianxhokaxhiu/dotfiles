@@ -120,3 +120,17 @@ source <(kubectl completion zsh)
 source <(kubeadm completion zsh)
 # Helm Package Manager
 source <(helm completion zsh)
+
+# Utilities
+###########
+
+is_domain_available() {
+  whois $1 | egrep -q \
+    '^NOT FOUND|^not found|^No match|^AVAILABLE' 2>&1 >&/dev/null
+
+  if [ $? -eq 0 ]; then
+    echo "YES! :)"
+  else
+    echo "NO :("
+  fi
+}
