@@ -88,6 +88,9 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
+# shift-tab : go backward in menu (invert of tab)
+bindkey '^[[Z' reverse-menu-complete
+
 # NPM without sudo
 ##################
 
