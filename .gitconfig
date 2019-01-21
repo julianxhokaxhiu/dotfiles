@@ -6,7 +6,7 @@
 [pull]
   rebase = true
 [alias]
-  cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"
+  cleanup = "!git remote prune origin && git branch -vv | grep ': gone]' | grep -v '\\*' | awk '{ print $1; }' | xargs -r git branch -D"
   deepclean = "git clean -fxd"
 [review "review.lineageos.org"]
 	username = JulianXhokaxhiu
