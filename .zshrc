@@ -137,3 +137,18 @@ is_domain_available() {
     echo "NO :("
   fi
 }
+
+# Update Arch Mirrorlist based on the best ranked mirror for your current country ( IP Based )
+pacman_updatelist() {
+  COUNTRY=`curl -s -L "http://ip-api.com/line/?fields=countryCode"`
+
+  MIRRORLIST=`curl -s "https://www.archlinux.org/mirrorlist/?country=$COUNTRY&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' | rankmirrors -n 5 -`
+
+  echo "$MIRRORLIST" | sudo tee /etc/pacman.d/mirrorlist > /dev/null
+
+  if [ $? -eq 0 ]; then
+    echo "Pacman mirrorlist updated successfully for country $COUNTRY."
+  else
+    echo "Something went wrong. Please retry."
+  fi
+}
