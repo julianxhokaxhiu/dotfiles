@@ -127,6 +127,9 @@ source <(helm completion zsh)
 # Utilities
 ###########
 
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+
 is_domain_available() {
   whois $1 | egrep -q \
     '^NOT FOUND|^not found|^No match|^AVAILABLE' 2>&1 >&/dev/null
