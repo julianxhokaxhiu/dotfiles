@@ -156,3 +156,15 @@ pacman_updatelist() {
     echo "Something went wrong. Please retry."
   fi
 }
+
+# Optimize disk on VMWare
+optimize_vmware_disk() {
+  sudo e4defrag /
+  dd if=/dev/zero of=wipefile bs=1M; sync; rm wipefile
+  sudo vmware-toolbox-cmd disk shrinkonly
+}
+
+# Cleanup NPM node_modules on the current working directory recursively
+cleanup_node_modules() {
+  find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+}
