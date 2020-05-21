@@ -91,6 +91,11 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 # shift-tab : go backward in menu (invert of tab)
 bindkey '^[[Z' reverse-menu-complete
 
+# GEM without sudo
+##################
+GEM_PACKAGES="${HOME}/.gem/ruby/2.7.0"
+PATH="$GEM_PACKAGES/bin:$PATH"
+
 # NPM without sudo
 ##################
 
