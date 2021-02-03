@@ -151,7 +151,7 @@ pacman_updatelist() {
   #COUNTRY=`curl -s -L "http://ip-api.com/line/?fields=countryCode"`
   COUNTRY=all
 
-  MIRRORLIST=`curl -s "https://www.archlinux.org/mirrorlist/?country=$COUNTRY&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' | rankmirrors -n 6 -`
+  MIRRORLIST=`curl -s "https://archlinux.org/mirrorlist/?country=$COUNTRY&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' | rankmirrors -n 6 -`
 
   echo "$MIRRORLIST" | sudo tee /etc/pacman.d/mirrorlist > /dev/null
 
