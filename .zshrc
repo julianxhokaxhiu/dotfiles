@@ -108,10 +108,6 @@ export NPM_CONFIG_PREFIX=${NPM_PACKAGES}
 # Inherit man files from the NPM packages folder
 export MANPATH="$NPM_PACKAGES/share/man:/usr/local/man:$MANPATH"
 
-# NPX
-#####
-source <(npx --shell-auto-fallback zsh)
-
 # Arch: Pacman Helper
 #####################
 
