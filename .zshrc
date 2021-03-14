@@ -169,3 +169,6 @@ optimize_vmware_disk() {
 cleanup_node_modules() {
   find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 }
+
+# Bulk rename tool
+autoload zmv
