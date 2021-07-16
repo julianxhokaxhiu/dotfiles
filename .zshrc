@@ -1,5 +1,23 @@
 # ~/.zshrc
 
+# helpers
+##########
+
+###############################################################################
+# Install an Arch Linux package only if not installed already
+###############################################################################
+# Arguments:
+# $1: Package name
+###############################################################################
+function ubm_ensure_archlinux_package
+{
+  _PACKAGE_NAME="$1"
+
+  if ! yay -Qs $_PACKAGE_NAME > /dev/null 2>&1; then
+    yay -S $_PACKAGE_NAME
+  fi
+}
+
 # history
 ##########
 
@@ -124,6 +142,8 @@ source <(kubectl completion zsh)
 source <(kubeadm completion zsh)
 # Helm Package Manager
 source <(helm completion zsh)
+# Krew
+export PATH="${PATH}:${HOME}/.krew/bin"
 
 # Utilities
 ###########
@@ -144,8 +164,8 @@ is_domain_available() {
 
 # Update Arch Mirrorlist based on the best ranked mirror for your current country ( IP Based )
 pacman_updatelist() {
-  COUNTRY=`curl -s -L "http://ip-api.com/line/?fields=countryCode"`
-  #COUNTRY=all
+  #COUNTRY=`curl -s -L "http://ip-api.com/line/?fields=countryCode"`
+  COUNTRY=all
 
   MIRRORLIST=`curl -s "https://archlinux.org/mirrorlist/?country=$COUNTRY&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' | rankmirrors -n 6 -`
 
@@ -170,5 +190,36 @@ cleanup_node_modules() {
   find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 }
 
+# Cleanup dead Kubernetes pods
+cleanup_kubernetes_pods() {
+  kubectl get pods --all-namespaces | grep -E 'ImagePullBackOff|ErrImagePull|Evicted|Error' | awk '{print $2 " --namespace=" $1}' | xargs kubectl delete pod
+}
+
 # Bulk rename tool
 autoload zmv
+
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
+if [ ! -z "${WSL_DISTRO_NAME}" ]; then
+  wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
+
+  if [ ! -f "$wsl2_ssh_pageant_bin" ]; then
+    echo -e ">> WSL2 Detected! Installing wsl2-ssh-pageant and required dependencies"
+    # check if socat and ss are installed too
+    ubm_ensure_archlinux_package "socat"
+    ubm_ensure_archlinux_package "ss"
+    # install wsl2 ssh pageant daemon
+    wget -O "$wsl2_ssh_pageant_bin" "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe"
+    chmod +x "$wsl2_ssh_pageant_bin"
+  fi
+
+  export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+  if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
+    rm -f "$SSH_AUTH_SOCK"
+    if test -x "$wsl2_ssh_pageant_bin"; then
+      (setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin" >/dev/null 2>&1 &)
+    else
+      echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
+    fi
+    unset wsl2_ssh_pageant_bin
+  fi
+fi
