@@ -223,3 +223,20 @@ if [ ! -z "${WSL_DISTRO_NAME}" ]; then
     unset wsl2_ssh_pageant_bin
   fi
 fi
+
+# Measure curl endpoint response times
+curl_measure() {
+cat << EOF >> /tmp/curl-format.txt
+     time_namelookup:  %{time_namelookup}s\n
+        time_connect:  %{time_connect}s\n
+     time_appconnect:  %{time_appconnect}s\n
+    time_pretransfer:  %{time_pretransfer}s\n
+       time_redirect:  %{time_redirect}s\n
+  time_starttransfer:  %{time_starttransfer}s\n
+                     ----------\n
+          time_total:  %{time_total}s\n
+EOF
+
+  curl -w "@/tmp/curl-format.txt" -o /dev/null -s "$1"
+  rm /tmp/curl-format.txt
+}
