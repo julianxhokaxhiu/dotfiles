@@ -240,3 +240,21 @@ EOF
   curl -w "@/tmp/curl-format.txt" -o /dev/null -s "$1"
   rm /tmp/curl-format.txt
 }
+
+# Install/Update wsl-distrod
+wsl_distrod() {
+  set -e
+  pushd /tmp
+
+  curl -L -O "https://raw.githubusercontent.com/nullpo-head/wsl-distrod/main/install.sh"
+  chmod +x install.sh
+  sudo ./install.sh $1
+  rm install.sh
+
+  if [ "$1" == "install" ]; then
+    /opt/distrod/bin/distrod enable --start-on-windows-boot
+  fi
+
+  popd
+  set +e
+}
