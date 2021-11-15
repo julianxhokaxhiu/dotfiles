@@ -250,11 +250,11 @@ wsl_distrod() {
   chmod +x install.sh
   sudo ./install.sh $1
   rm install.sh
+  popd
 
   if [ "$1" == "install" ]; then
-    /opt/distrod/bin/distrod enable --start-on-windows-boot
+    sudo /opt/distrod/bin/distrod enable --start-on-windows-boot
   fi
-
-  popd
+  
   set +e
 }
