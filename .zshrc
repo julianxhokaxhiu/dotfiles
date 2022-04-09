@@ -255,6 +255,6 @@ wsl_distrod() {
   if [ "$1" == "install" ]; then
     sudo /opt/distrod/bin/distrod enable --start-on-windows-boot
   fi
-  
+
   set +e
 }
