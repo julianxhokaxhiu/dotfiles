@@ -258,3 +258,15 @@ wsl_distrod() {
 
   set +e
 }
+
+# Visualize certificate chain
+# Source: https://stackoverflow.com/a/59412853
+seecert() {
+  nslookup $1
+  (openssl s_client -showcerts -servername $1 -connect $1:443 <<< "Q" | openssl x509 -text | grep -iA2 "Validity")
+}
+
+# Get K8s Pods on each node by selector
+kubectl_get_pods_in_node() {
+  kubectl get nodes -l $1 -o jsonpath="{range .items[*]}spec.nodeName={.metadata.name}{'\n'}{end}" | xargs -t -n1 kubectl get pods --all-namespaces --field-selector
+}
