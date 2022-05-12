@@ -142,8 +142,6 @@ source <(kubectl completion zsh)
 source <(kubeadm completion zsh)
 # Helm Package Manager
 source <(helm completion zsh)
-# Certificate Manager
-source <(cmctl completion zsh)
 # Krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
