@@ -90,11 +90,14 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p $ZSH_CACHE_DIR
 fi
 
-# Load antibody
-source <(antibody init)
+# clone antidote if necessary
+[[ -e ~/.antidote ]] || git clone https://github.com/mattmc3/antidote.git ~/.antidote
 
-# Load zsh plugins
-antibody bundle < ~/.zsh_plugins
+# source antidote
+. ~/.antidote/antidote.zsh
+
+# generate and source plugins from ~/.zsh_plugins.txt
+antidote load
 
 # zsh-users/zsh-history-substring-search
 ########################################
