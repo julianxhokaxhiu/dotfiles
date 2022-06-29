@@ -1,5 +1,6 @@
 [core]
   filemode = false
+  fsmonitor = true
 [user]
   name = Julian Xhokaxhiu
   email = info@julianxhokaxhiu.com
