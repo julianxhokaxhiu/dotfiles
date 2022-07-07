@@ -273,3 +273,8 @@ seecert() {
 kubectl_get_pods_in_node() {
   kubectl get nodes -l $1 -o jsonpath="{range .items[*]}spec.nodeName={.metadata.name}{'\n'}{end}" | xargs -t -n1 kubectl get pods --all-namespaces --field-selector
 }
+
+# Build docker-compose projects under proxy
+docker_compose_build_proxy() {
+  docker buildx bake -f docker-compose.yml
+}
