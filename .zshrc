@@ -278,3 +278,14 @@ kubectl_get_pods_in_node() {
 docker_compose_build_proxy() {
   docker buildx bake -f docker-compose.yml
 }
+
+# Disable proxy in the current environment
+disable_proxy() {
+  PROXIES=("HTTP" "HTTPS" "FTP" "RTSP" "SOCKS" "Gopher" "NO" "ALL")
+  for PROXY in "${PROXIES[@]}"
+  do
+    :
+    unset "${PROXY:l}_proxy"
+    unset "${PROXY}_PROXY"
+  done
+}
