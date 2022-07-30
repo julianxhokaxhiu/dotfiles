@@ -198,6 +198,11 @@ cleanup_kubernetes_pods() {
   kubectl get pods --all-namespaces | grep -E 'ImagePullBackOff|ErrImagePull|Evicted|Error' | awk '{print $2 " --namespace=" $1}' | xargs kubectl delete pod
 }
 
+# Force cleanup terminated pods
+kill_kubernetes_terminating_pods() {
+  kubectl get pods --all-namespaces | grep -E 'Terminating' | awk '{print $2 " --force=true --namespace=" $1}' | xargs kubectl delete pod
+}
+
 # Bulk rename tool
 autoload zmv
 
