@@ -94,10 +94,11 @@ fi
 [[ -e ~/.antidote ]] || git clone https://github.com/mattmc3/antidote.git ~/.antidote
 
 # source antidote
-. ~/.antidote/antidote.zsh
+source ~/.antidote/antidote.zsh
+source <(antidote init)
 
 # generate and source plugins from ~/.zsh_plugins.txt
-antidote load
+antidote bundle < ~/.zsh_plugins.txt
 
 # zsh-users/zsh-history-substring-search
 ########################################
