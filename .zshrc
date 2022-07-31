@@ -9,7 +9,7 @@
 # Arguments:
 # $1: Package name
 ###############################################################################
-function ubm_ensure_archlinux_package
+function ensure_archlinux_package
 {
   _PACKAGE_NAME="$1"
 
