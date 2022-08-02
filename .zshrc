@@ -113,6 +113,10 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 # shift-tab : go backward in menu (invert of tab)
 bindkey '^[[Z' reverse-menu-complete
 
+# Spaceship Options
+###################
+SPACESHIP_KUBECTL_SHOW=true
+
 # GEM without sudo
 ##################
 GEM_PACKAGES="${HOME}/.gem/ruby/2.7.0"
