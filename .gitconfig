@@ -9,6 +9,7 @@
 [alias]
   cleanup = "!git remote prune origin && git branch -vv | grep ': gone]' | grep -v '\\*' | awk '{ print $1; }' | xargs -r git branch -D"
   deepclean = "!git clean -ffxd"
+  ice = "!git add . && git commit -m 'ICE' && git push origin ice/$(whoami)-$(date --rfc-3339=date)"
 [review "review.lineageos.org"]
   username = JulianXhokaxhiu
 [color]
