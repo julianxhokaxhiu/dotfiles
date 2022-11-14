@@ -150,6 +150,10 @@ source <(kubectl completion zsh)
 source <(kubeadm completion zsh)
 # Helm Package Manager
 source <(helm completion zsh)
+# Kind
+source <(kind completion zsh)
+# Tilt
+source <(tilt completion zsh)
 # Krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
