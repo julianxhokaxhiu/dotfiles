@@ -154,6 +154,8 @@ source <(helm completion zsh)
 source <(kind completion zsh)
 # Tilt
 source <(tilt completion zsh)
+# ArgoCD
+source <(argocd completion zsh)
 # Krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
