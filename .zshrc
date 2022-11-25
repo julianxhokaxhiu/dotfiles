@@ -142,6 +142,10 @@ alias pacman_clean_orphans="sudo pacman -Rns $(pacman -Qtdq | tr '\n' ' ' | xarg
 # https://wiki.archlinux.org/index.php/Pacman/Tips_and_tricks#Database_access_speeds + AUR via pacaur
 alias pacman_clean_cache="yay -Sc"
 
+# asdf-vm
+#########
+source /opt/asdf-vm/asdf.sh
+
 # Kubernetes
 ############
 # KubeCtl
