@@ -247,6 +247,16 @@ if [ ! -z "${WSL_DISTRO_NAME}" ]; then
   fi
 fi
 
+# https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/
+WSL_SYSTEMD_ENABLED=$(grep 'systemd=true' /etc/wsl.conf)
+if [ -z "${WSL_SYSTEMD_ENABLED}" ]; then
+echo "Enabling native WSL2 systemd support..."
+sudo tee -a /etc/wsl.conf << EOF
+[boot]
+systemd=true
+EOF
+fi
+
 # Measure curl endpoint response times
 curl_measure() {
 cat << EOF >> /tmp/curl-format.txt
@@ -265,22 +275,22 @@ EOF
 }
 
 # Install/Update wsl-distrod
-wsl_distrod() {
-  set -e
-  pushd /tmp
+# wsl_distrod() {
+#   set -e
+#   pushd /tmp
 
-  curl -L -O "https://raw.githubusercontent.com/nullpo-head/wsl-distrod/main/install.sh"
-  chmod +x install.sh
-  sudo ./install.sh $1
-  rm install.sh
-  popd
+#   curl -L -O "https://raw.githubusercontent.com/nullpo-head/wsl-distrod/main/install.sh"
+#   chmod +x install.sh
+#   sudo ./install.sh $1
+#   rm install.sh
+#   popd
 
-  if [ "$1" == "install" ]; then
-    sudo /opt/distrod/bin/distrod enable --start-on-windows-boot
-  fi
+#   if [ "$1" == "install" ]; then
+#     sudo /opt/distrod/bin/distrod enable --start-on-windows-boot
+#   fi
 
-  set +e
-}
+#   set +e
+# }
 
 # Visualize certificate chain
 # Source: https://stackoverflow.com/a/59412853
