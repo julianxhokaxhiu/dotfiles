@@ -245,17 +245,18 @@ if [ ! -z "${WSL_DISTRO_NAME}" ]; then
     fi
     unset wsl2_ssh_pageant_bin
   fi
-fi
 
-# https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/
-WSL_SYSTEMD_ENABLED=$(grep 'systemd=true' /etc/wsl.conf)
-if [ -z "${WSL_SYSTEMD_ENABLED}" ]; then
-echo "Enabling native WSL2 systemd support..."
-sudo tee -a /etc/wsl.conf << EOF
+  # https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/
+  WSL_SYSTEMD_ENABLED=$(grep 'systemd=true' /etc/wsl.conf)
+  if [ -z "${WSL_SYSTEMD_ENABLED}" ]; then
+  echo "Enabling native WSL2 systemd support..."
+  sudo tee -a /etc/wsl.conf << EOF
 [boot]
 systemd=true
 EOF
 fi
+fi
+
 
 # Measure curl endpoint response times
 curl_measure() {
