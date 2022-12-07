@@ -320,3 +320,23 @@ disable_proxy() {
     unset "${PROXY}_PROXY"
   done
 }
+
+# Start macOS machine using docker
+# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
+docker_run_macos() {
+  echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
+
+  MACOS_DISTRO="${1:-monterey}"
+
+  docker run --device /dev/kvm \
+    --privileged \
+    -p 50922:10022 \
+    -e XDG_RUNTIME_DIR=/tmp \
+    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
+    -e QT_QPA_PLATFORM=wayland \
+    -e GDK_BACKEND=wayland \
+    -e CLUTTER_BACKEND=wayland \
+    -e DISPLAY=:0 \
+    -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY \
+    sickcodes/docker-osx:$MACOS_DISTRO
+}
