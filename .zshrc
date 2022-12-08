@@ -321,33 +321,42 @@ disable_proxy() {
   done
 }
 
-# Start macOS machine using docker
+### ====================================================================== ###
+
+# Run a macOS machine using docker
 # $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
 docker_run_macos() {
   echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
 
   MACOS_DISTRO="${1:-ventura}"
-  MACOS_IMAGE_PATH="$(realpath ~/qemu/macos-${MACOS_DISTRO})"
-  MACOS_IMAGE_INTERNAL_PATH="/home/arch/OSX-KVM/persistent"
+  MACOS_IMAGE_NAME="mac_hdd_ng.img"
+  MACOS_LOCAL_PATH="$(realpath ~/qemu/macos-${MACOS_DISTRO})"
+  MACOS_CONTAINER_PATH="/home/arch/OSX-KVM/persistent"
 
-  mkdir -p $MACOS_IMAGE_PATH
-  docker pull -q sickcodes/docker-osx:${MACOS_DISTRO}
-  id=$(docker create sickcodes/docker-osx:${MACOS_DISTRO})
-  docker cp "$id:/home/arch/OSX-KVM/mac_hdd_ng.img" "$MACOS_IMAGE_PATH/mac_hdd_ng.img"
-  docker rm -v $id >/dev/null 2>&1
+  mkdir -p "$MACOS_LOCAL_PATH"
+  docker pull -q "sickcodes/docker-osx:${MACOS_DISTRO}"
+
+  # If a persistent disk image does not exist copy the initial one from the container
+  if [ ! -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
+    id=$(docker create sickcodes/docker-osx:${MACOS_DISTRO})
+    docker cp "$id:/home/arch/OSX-KVM/${MACOS_IMAGE_NAME}" "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}"
+    docker rm -v $id >/dev/null 2>&1
+  fi
 
   if [ ! -z "${WSL_DISTRO_NAME}" ]; then
+    # Run OSX on WSL2
     docker run \
       -it \
       --device /dev/kvm \
       -p 50922:10022 \
       -e "DISPLAY=${DISPLAY:-:0.0}" \
       -e "GENERATE_UNIQUE=true" \
-      -e "IMAGE_PATH=${MACOS_IMAGE_INTERNAL_PATH}/mac_hdd_ng.img" \
+      -e "IMAGE_PATH=${MACOS_CONTAINER_PATH}/${MACOS_IMAGE_NAME}" \
       -v "/mnt/wslg/.X11-unix:/tmp/.X11-unix" \
-      -v "${MACOS_IMAGE_PATH}:${MACOS_IMAGE_INTERNAL_PATH}" \
+      -v "${MACOS_LOCAL_PATH}:${MACOS_CONTAINER_PATH}" \
       sickcodes/docker-osx:${MACOS_DISTRO}
   else
+    # Run OSX on Linux w/Wayland
     docker run \
       -it \
       --privileged \
@@ -357,12 +366,33 @@ docker_run_macos() {
       -e "DISPLAY=${DISPLAY:-:0}" \
       -e "GENERATE_UNIQUE=true" \
       -e "GDK_BACKEND=wayland" \
-      -e "IMAGE_PATH=${MACOS_IMAGE_INTERNAL_PATH}/mac_hdd_ng.img" \
+      -e "IMAGE_PATH=${MACOS_CONTAINER_PATH}/${MACOS_IMAGE_NAME}" \
       -e "QT_QPA_PLATFORM=wayland" \
       -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}" \
       -e "XDG_RUNTIME_DIR=/tmp" \
-      -v "${MACOS_IMAGE_PATH}:${MACOS_IMAGE_INTERNAL_PATH}" \
+      -v "${MACOS_LOCAL_PATH}:${MACOS_CONTAINER_PATH}" \
       -v "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:/tmp/${WAYLAND_DISPLAY}" \
       sickcodes/docker-osx:${MACOS_DISTRO}
   fi
+}
+
+# Delete a current macOS machine using docker
+# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
+docker_rm_macos() {
+  MACOS_DISTRO="${1:-ventura}"
+  MACOS_IMAGE_NAME="mac_hdd_ng.img"
+  MACOS_LOCAL_PATH="$(realpath ~/qemu/macos-${MACOS_DISTRO})"
+
+  if [ -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
+    echo "Image for macOS ${MACOS_DISTRO} found. Removing..."
+    rm -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}"
+  fi
+}
+
+# Remove macOS docker images
+# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
+docker_clean_macos() {
+  MACOS_DISTRO="${1:-ventura}"
+
+  docker rmi sickcodes/docker-osx:${MACOS_DISTRO}
 }
