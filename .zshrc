@@ -330,7 +330,7 @@ docker_run_macos() {
 
   MACOS_DISTRO="${1:-ventura}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
-  MACOS_LOCAL_PATH="$(realpath ~/.local/docker-osx/macos-${MACOS_DISTRO})"
+  MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/macos-${MACOS_DISTRO}"
   MACOS_CONTAINER_PATH="/home/arch/OSX-KVM/persistent"
 
   mkdir -p "$MACOS_LOCAL_PATH"
@@ -346,6 +346,7 @@ docker_run_macos() {
   if [ ! -z "${WSL_DISTRO_NAME}" ]; then
     # Run OSX on WSL2
     docker run \
+      --rm=true \
       -it \
       --device /dev/kvm \
       -p 50922:10022 \
@@ -358,6 +359,7 @@ docker_run_macos() {
   else
     # Run OSX on Linux w/Wayland
     docker run \
+      --rm=true \
       -it \
       --privileged \
       --device /dev/kvm \
@@ -381,7 +383,7 @@ docker_run_macos() {
 docker_rm_macos() {
   MACOS_DISTRO="${1:-ventura}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
-  MACOS_LOCAL_PATH="$(realpath ~/.local/docker-osx/macos-${MACOS_DISTRO})"
+  MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/macos-${MACOS_DISTRO}"
 
   if [ -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
     echo "Image for macOS ${MACOS_DISTRO} found. Removing..."
