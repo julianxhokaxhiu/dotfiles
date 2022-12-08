@@ -326,17 +326,43 @@ disable_proxy() {
 docker_run_macos() {
   echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
 
-  MACOS_DISTRO="${1:-monterey}"
+  MACOS_DISTRO="${1:-ventura}"
+  MACOS_IMAGE_PATH="$(realpath ~/qemu/macos-${MACOS_DISTRO})"
+  MACOS_IMAGE_INTERNAL_PATH="/home/arch/OSX-KVM/persistent"
 
-  docker run --device /dev/kvm \
-    --privileged \
-    -p 50922:10022 \
-    -e XDG_RUNTIME_DIR=/tmp \
-    -e WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
-    -e QT_QPA_PLATFORM=wayland \
-    -e GDK_BACKEND=wayland \
-    -e CLUTTER_BACKEND=wayland \
-    -e DISPLAY=:0 \
-    -v $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY:/tmp/$WAYLAND_DISPLAY \
-    sickcodes/docker-osx:$MACOS_DISTRO
+  mkdir -p $MACOS_IMAGE_PATH
+  docker pull -q sickcodes/docker-osx:${MACOS_DISTRO}
+  id=$(docker create sickcodes/docker-osx:${MACOS_DISTRO})
+  docker cp "$id:/home/arch/OSX-KVM/mac_hdd_ng.img" "$MACOS_IMAGE_PATH/mac_hdd_ng.img"
+  docker rm -v $id >/dev/null 2>&1
+
+  if [ ! -z "${WSL_DISTRO_NAME}" ]; then
+    docker run \
+      -it \
+      --device /dev/kvm \
+      -p 50922:10022 \
+      -e "DISPLAY=${DISPLAY:-:0.0}" \
+      -e "GENERATE_UNIQUE=true" \
+      -e "IMAGE_PATH=${MACOS_IMAGE_INTERNAL_PATH}/mac_hdd_ng.img" \
+      -v "/mnt/wslg/.X11-unix:/tmp/.X11-unix" \
+      -v "${MACOS_IMAGE_PATH}:${MACOS_IMAGE_INTERNAL_PATH}" \
+      sickcodes/docker-osx:${MACOS_DISTRO}
+  else
+    docker run \
+      -it \
+      --privileged \
+      --device /dev/kvm \
+      -p 50922:10022 \
+      -e "CLUTTER_BACKEND=wayland" \
+      -e "DISPLAY=${DISPLAY:-:0}" \
+      -e "GENERATE_UNIQUE=true" \
+      -e "GDK_BACKEND=wayland" \
+      -e "IMAGE_PATH=${MACOS_IMAGE_INTERNAL_PATH}/mac_hdd_ng.img" \
+      -e "QT_QPA_PLATFORM=wayland" \
+      -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}" \
+      -e "XDG_RUNTIME_DIR=/tmp" \
+      -v "${MACOS_IMAGE_PATH}:${MACOS_IMAGE_INTERNAL_PATH}" \
+      -v "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:/tmp/${WAYLAND_DISPLAY}" \
+      sickcodes/docker-osx:${MACOS_DISTRO}
+  fi
 }
