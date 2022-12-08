@@ -330,7 +330,7 @@ docker_run_macos() {
 
   MACOS_DISTRO="${1:-ventura}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
-  MACOS_LOCAL_PATH="$(realpath ~/qemu/macos-${MACOS_DISTRO})"
+  MACOS_LOCAL_PATH="$(realpath ~/.local/docker-osx/macos-${MACOS_DISTRO})"
   MACOS_CONTAINER_PATH="/home/arch/OSX-KVM/persistent"
 
   mkdir -p "$MACOS_LOCAL_PATH"
@@ -381,7 +381,7 @@ docker_run_macos() {
 docker_rm_macos() {
   MACOS_DISTRO="${1:-ventura}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
-  MACOS_LOCAL_PATH="$(realpath ~/qemu/macos-${MACOS_DISTRO})"
+  MACOS_LOCAL_PATH="$(realpath ~/.local/docker-osx/macos-${MACOS_DISTRO})"
 
   if [ -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
     echo "Image for macOS ${MACOS_DISTRO} found. Removing..."
