@@ -327,6 +327,7 @@ disable_proxy() {
 # $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
 docker_run_macos() {
   echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
+  echo "Once you're done installing macOS, you can make the VM faster using some tricks you can find here: https://github.com/sickcodes/osx-optimizer"
 
   MACOS_DISTRO="${1:-ventura}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
