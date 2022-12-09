@@ -351,6 +351,8 @@ docker_run_macos() {
       -it \
       --device /dev/kvm \
       -p 50922:10022 \
+      -e "CPU=max" \
+      -e "BOOT_ARGS=+vmx" \
       -e "DISPLAY=${DISPLAY:-:0.0}" \
       -e "GENERATE_UNIQUE=true" \
       -e "IMAGE_PATH=${MACOS_CONTAINER_PATH}/${MACOS_IMAGE_NAME}" \
@@ -365,6 +367,8 @@ docker_run_macos() {
       --privileged \
       --device /dev/kvm \
       -p 50922:10022 \
+      -e "CPU=max" \
+      -e "BOOT_ARGS=+vmx" \
       -e "CLUTTER_BACKEND=wayland" \
       -e "DISPLAY=${DISPLAY:-:0}" \
       -e "GENERATE_UNIQUE=true" \
