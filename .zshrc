@@ -139,19 +139,25 @@ SPACESHIP_KUBECTL_SHOW=true
 # GEM without sudo
 ##################
 GEM_PACKAGES="${HOME}/.gem/ruby/2.7.0"
-PATH="$GEM_PACKAGES/bin:$PATH"
+export PATH="$GEM_PACKAGES/bin:$PATH"
 
 # NPM without sudo
 ##################
 
 NPM_PACKAGES="${HOME}/.npm-packages"
-PATH="$NPM_PACKAGES/bin:$PATH"
+export PATH="$NPM_PACKAGES/bin:$PATH"
 
 # Use this way to configure NPM in order to avoid pushing .npmrc by mistake with token credentials
 export NPM_CONFIG_PREFIX=${NPM_PACKAGES}
 
 # Inherit man files from the NPM packages folder
 export MANPATH="$NPM_PACKAGES/share/man:/usr/local/man:$MANPATH"
+
+# pnpm setup
+############
+
+export PNPM_HOME="${HOME}/.pnpm"
+export PATH="${PNPM_HOME}:$PATH"
 
 # Arch: Pacman Helper
 #####################
