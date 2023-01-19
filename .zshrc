@@ -159,6 +159,9 @@ export MANPATH="$NPM_PACKAGES/share/man:/usr/local/man:$MANPATH"
 export PNPM_HOME="${HOME}/.pnpm"
 export PATH="${PNPM_HOME}:$PATH"
 
+# make sure you run 'pnpm install-completion zsh' at least once
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
 # Arch: Pacman Helper
 #####################
 
