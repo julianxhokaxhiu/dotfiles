@@ -131,10 +131,9 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 # shift-tab : go backward in menu (invert of tab)
 bindkey '^[[Z' reverse-menu-complete
 
-# Spaceship Options
+# Starship Init
 ###################
-SPACESHIP_PROMPT_ASYNC=false
-SPACESHIP_KUBECTL_SHOW=true
+eval "$(starship init zsh)"
 
 # GEM without sudo
 ##################

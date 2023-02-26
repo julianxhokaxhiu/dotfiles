@@ -1,6 +1,3 @@
-# Spaceship theme
-spaceship-prompt/spaceship-prompt
-
 # Syntax highlighting
 zsh-users/zsh-syntax-highlighting
 
