@@ -188,6 +188,8 @@ source <(kind completion zsh)
 source <(tilt completion zsh)
 # ArgoCD
 source <(argocd completion zsh)
+# Knative
+source <(kn completion zsh)
 # Krew
 export PATH="${PATH}:${HOME}/.krew/bin"
 
