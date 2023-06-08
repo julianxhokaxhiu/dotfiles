@@ -211,18 +211,17 @@ is_domain_available() {
 
 # Update Arch Mirrorlist based on the best ranked mirror for your current country ( IP Based )
 pacman_updatelist() {
-  #COUNTRY=`curl -s -L "http://ip-api.com/line/?fields=countryCode"`
-  COUNTRY=all
+  COUNTRY=$(curl -s -L "http://ip-api.com/line/?fields=countryCode")
 
-  MIRRORLIST=`curl -s "https://archlinux.org/mirrorlist/?country=$COUNTRY&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' | rankmirrors -n 6 -`
+  sudo tee /etc/xdg/reflector/reflector.conf >&/dev/null << EOF
+--save /etc/pacman.d/mirrorlist
+--protocol https
+--country $COUNTRY,DE,US
+--latest 5
+--sort age
+EOF
 
-  echo "$MIRRORLIST" | sudo tee /etc/pacman.d/mirrorlist > /dev/null
-
-  if [ $? -eq 0 ]; then
-    echo "Pacman mirrorlist updated successfully for country $COUNTRY."
-  else
-    echo "Something went wrong. Please retry."
-  fi
+  sudo systemctl restart reflector.service
 }
 
 # Optimize disk on VMWare
@@ -303,24 +302,6 @@ EOF
   curl -w "@/tmp/curl-format.txt" -o /dev/null -s "$1"
   rm /tmp/curl-format.txt
 }
-
-# Install/Update wsl-distrod
-# wsl_distrod() {
-#   set -e
-#   pushd /tmp
-
-#   curl -L -O "https://raw.githubusercontent.com/nullpo-head/wsl-distrod/main/install.sh"
-#   chmod +x install.sh
-#   sudo ./install.sh $1
-#   rm install.sh
-#   popd
-
-#   if [ "$1" == "install" ]; then
-#     sudo /opt/distrod/bin/distrod enable --start-on-windows-boot
-#   fi
-
-#   set +e
-# }
 
 # Visualize certificate chain
 # Source: https://stackoverflow.com/a/59412853
