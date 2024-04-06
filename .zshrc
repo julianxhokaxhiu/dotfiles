@@ -337,7 +337,7 @@ docker_run_macos() {
   echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
   echo "Once you're done installing macOS, you can make the VM faster using some tricks you can find here: https://github.com/sickcodes/osx-optimizer"
 
-  MACOS_DISTRO="${1:-ventura}"
+  MACOS_DISTRO="${1:-latest}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
   MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/${MACOS_DISTRO}"
   MACOS_CONTAINER_PATH="/home/arch/OSX-KVM/persistent"
@@ -394,7 +394,7 @@ docker_run_macos() {
 # Delete a current macOS machine using docker
 # $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
 docker_rm_macos() {
-  MACOS_DISTRO="${1:-ventura}"
+  MACOS_DISTRO="${1:-latest}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
   MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/${MACOS_DISTRO}"
 
@@ -407,7 +407,7 @@ docker_rm_macos() {
 # Remove macOS docker images
 # $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
 docker_clean_macos() {
-  MACOS_DISTRO="${1:-ventura}"
+  MACOS_DISTRO="${1:-latest}"
 
   docker rmi sickcodes/docker-osx:${MACOS_DISTRO}
 }
