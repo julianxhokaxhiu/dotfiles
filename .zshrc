@@ -159,7 +159,7 @@ export PNPM_HOME="${HOME}/.pnpm"
 export PATH="${PNPM_HOME}:$PATH"
 
 # make sure you run 'pnpm install-completion zsh' at least once
-[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && source ~/.config/tabtab/zsh/__tabtab.zsh || true
 
 # Arch: Pacman Helper
 #####################
@@ -171,26 +171,24 @@ alias pacman_clean_cache="yay -Sc"
 
 # asdf-vm
 #########
-source /opt/asdf-vm/asdf.sh
+[[ -f /opt/asdf-vm/asdf.sh ]] && source /opt/asdf-vm/asdf.sh
 
 # Kubernetes
 ############
 # KubeCtl
-source <(kubectl completion zsh)
+which kubectl >/dev/null && source <(kubectl completion zsh) && export PATH="${PATH}:${HOME}/.krew/bin"
 # KubeAdm
-source <(kubeadm completion zsh)
+which kubeadm >/dev/null && source <(kubeadm completion zsh)
 # Helm Package Manager
-source <(helm completion zsh)
+which helm >/dev/null && source <(helm completion zsh)
 # Kind
-source <(kind completion zsh)
+which kind >/dev/null && source <(kind completion zsh)
 # Tilt
-source <(tilt completion zsh)
+which tilt >/dev/null && source <(tilt completion zsh)
 # ArgoCD
-source <(argocd completion zsh)
+which argocd >/dev/null && source <(argocd completion zsh)
 # Knative
-source <(kn completion zsh)
-# Krew
-export PATH="${PATH}:${HOME}/.krew/bin"
+which kn >/dev/null && source <(kn completion zsh)
 
 # Utilities
 ###########
