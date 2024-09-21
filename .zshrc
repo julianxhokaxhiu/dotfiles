@@ -345,7 +345,13 @@ docker_run_macos() {
 
   mkdir -p "$MACOS_LOCAL_PATH"
   #docker pull -q "sickcodes/docker-osx:${MACOS_DISTRO}"
-  git clone https://github.com/sickcodes/Docker-OSX.git "${MACOS_DOCKER_GIT_PATH}"
+  if [ -d "${MACOS_DOCKER_GIT_PATH}" ]; then
+    pushd "${MACOS_DOCKER_GIT_PATH}"
+    git pull --all
+    popd
+  else
+    git clone https://github.com/sickcodes/Docker-OSX.git "${MACOS_DOCKER_GIT_PATH}"
+  fi
   pushd "${MACOS_DOCKER_GIT_PATH}"
   docker build -t sickcodes/docker-osx:${MACOS_DISTRO} --build-arg SHORTNAME=${MACOS_DISTRO} .
   popd
