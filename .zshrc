@@ -337,13 +337,18 @@ docker_run_macos() {
   echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
   echo "Once you're done installing macOS, you can make the VM faster using some tricks you can find here: https://github.com/sickcodes/osx-optimizer"
 
-  MACOS_DISTRO="${1:-latest}"
+  MACOS_DISTRO="${1:-sonoma}"
   MACOS_IMAGE_NAME="mac_hdd_ng.img"
   MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/${MACOS_DISTRO}"
   MACOS_CONTAINER_PATH="/home/arch/OSX-KVM/persistent"
+  MACOS_DOCKER_GIT_PATH="$(realpath ~/.local)/docker-osx/sickcodes"
 
   mkdir -p "$MACOS_LOCAL_PATH"
-  docker pull -q "sickcodes/docker-osx:${MACOS_DISTRO}"
+  #docker pull -q "sickcodes/docker-osx:${MACOS_DISTRO}"
+  git clone https://github.com/sickcodes/Docker-OSX.git "${MACOS_DOCKER_GIT_PATH}"
+  pushd "${MACOS_DOCKER_GIT_PATH}"
+  docker build -t sickcodes/docker-osx:${MACOS_DISTRO} --build-arg SHORTNAME=${MACOS_DISTRO} .
+  popd
 
   # If a persistent disk image does not exist copy the initial one from the container
   if [ ! -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
