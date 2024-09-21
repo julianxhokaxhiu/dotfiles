@@ -332,93 +332,38 @@ disable_proxy() {
 ### ====================================================================== ###
 
 # Run a macOS machine using docker
-# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
+# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://github.com/dockur/macos?tab=readme-ov-file#how-do-i-select-the-macos-version
 docker_run_macos() {
-  echo "If you're having issues, make sure you follow this setup first: https://github.com/sickcodes/Docker-OSX#initial-setup"
   echo "Once you're done installing macOS, you can make the VM faster using some tricks you can find here: https://github.com/sickcodes/osx-optimizer"
 
   MACOS_DISTRO="${1:-sonoma}"
-  MACOS_IMAGE_NAME="mac_hdd_ng.img"
-  MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/${MACOS_DISTRO}"
-  MACOS_CONTAINER_PATH="/home/arch/OSX-KVM/persistent"
-  MACOS_DOCKER_GIT_PATH="$(realpath ~/.local)/docker-osx/sickcodes"
+  MACOS_LOCAL_PATH="$(realpath ~/.local)/dockur-macos/${MACOS_DISTRO}"
+  MACOS_CONTAINER_PATH="/storage"
 
   mkdir -p "$MACOS_LOCAL_PATH"
-  #docker pull -q "sickcodes/docker-osx:${MACOS_DISTRO}"
-  if [ -d "${MACOS_DOCKER_GIT_PATH}" ]; then
-    pushd "${MACOS_DOCKER_GIT_PATH}"
-    git pull --all
-    popd
-  else
-    git clone https://github.com/sickcodes/Docker-OSX.git "${MACOS_DOCKER_GIT_PATH}"
-  fi
-  pushd "${MACOS_DOCKER_GIT_PATH}"
-  docker build -t sickcodes/docker-osx:${MACOS_DISTRO} --build-arg SHORTNAME=${MACOS_DISTRO} .
-  popd
-
-  # If a persistent disk image does not exist copy the initial one from the container
-  if [ ! -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
-    id=$(docker create sickcodes/docker-osx:${MACOS_DISTRO})
-    docker cp "$id:/home/arch/OSX-KVM/${MACOS_IMAGE_NAME}" "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}"
-    docker rm -v $id >/dev/null 2>&1
-  fi
-
-  if [ ! -z "${WSL_DISTRO_NAME}" ]; then
-    # Run OSX on WSL2
-    docker run \
-      --rm=true \
-      -it \
-      --device /dev/kvm \
-      -p 50922:10022 \
-      -e "CPU=max" \
-      -e "BOOT_ARGS=+vmx" \
-      -e "DISPLAY=${DISPLAY:-:0.0}" \
-      -e "GENERATE_UNIQUE=true" \
-      -e "IMAGE_PATH=${MACOS_CONTAINER_PATH}/${MACOS_IMAGE_NAME}" \
-      -v "/mnt/wslg/.X11-unix:/tmp/.X11-unix" \
-      -v "${MACOS_LOCAL_PATH}:${MACOS_CONTAINER_PATH}" \
-      sickcodes/docker-osx:${MACOS_DISTRO}
-  else
-    # Run OSX on Linux w/Wayland
-    docker run \
-      --rm=true \
-      -it \
-      --privileged \
-      --device /dev/kvm \
-      -p 50922:10022 \
-      -e "CPU=max" \
-      -e "BOOT_ARGS=+vmx" \
-      -e "CLUTTER_BACKEND=wayland" \
-      -e "DISPLAY=${DISPLAY:-:0}" \
-      -e "GENERATE_UNIQUE=true" \
-      -e "GDK_BACKEND=wayland" \
-      -e "IMAGE_PATH=${MACOS_CONTAINER_PATH}/${MACOS_IMAGE_NAME}" \
-      -e "QT_QPA_PLATFORM=wayland" \
-      -e "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}" \
-      -e "XDG_RUNTIME_DIR=/tmp" \
-      -v "${MACOS_LOCAL_PATH}:${MACOS_CONTAINER_PATH}" \
-      -v "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:/tmp/${WAYLAND_DISPLAY}" \
-      sickcodes/docker-osx:${MACOS_DISTRO}
-  fi
+  docker run \
+    --rm=true \
+    -it \
+    --privileged \
+    --device /dev/kvm \
+    --stop-timeout 120 \
+    -p 8006:8006 \
+    -e "VERSION=${MACOS_DISTRO}" \
+    -e "DISK_SIZE=64G" \
+    -e "RAM_SIZE=4G" \
+    -e "CPU_CORES=2" \
+    -v "${MACOS_LOCAL_PATH}:${MACOS_CONTAINER_PATH}" \
+    dockurr/macos
 }
 
 # Delete a current macOS machine using docker
-# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
+# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://github.com/dockur/macos?tab=readme-ov-file#how-do-i-select-the-macos-version
 docker_rm_macos() {
-  MACOS_DISTRO="${1:-latest}"
-  MACOS_IMAGE_NAME="mac_hdd_ng.img"
-  MACOS_LOCAL_PATH="$(realpath ~/.local)/docker-osx/${MACOS_DISTRO}"
+  MACOS_DISTRO="${1:-sonoma}"
+  MACOS_LOCAL_PATH="$(realpath ~/.local)/dockur-macos/${MACOS_DISTRO}"
 
-  if [ -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}" ]; then
+  if [ -d "${MACOS_LOCAL_PATH}" ]; then
     echo "Image for macOS ${MACOS_DISTRO} found. Removing..."
-    rm -f "${MACOS_LOCAL_PATH}/${MACOS_IMAGE_NAME}"
+    rm -rf "${MACOS_LOCAL_PATH}"
   fi
-}
-
-# Remove macOS docker images
-# $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://hub.docker.com/r/sickcodes/docker-osx/tags
-docker_clean_macos() {
-  MACOS_DISTRO="${1:-latest}"
-
-  docker rmi sickcodes/docker-osx:${MACOS_DISTRO}
 }
