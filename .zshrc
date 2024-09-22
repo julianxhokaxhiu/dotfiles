@@ -81,6 +81,9 @@ else
   export EDITOR='nano'
 fi
 
+# Preferred diff program
+export DIFFPROG='meld'
+
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
