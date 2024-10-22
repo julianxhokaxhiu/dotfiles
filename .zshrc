@@ -192,6 +192,8 @@ which tilt >/dev/null && source <(tilt completion zsh)
 which argocd >/dev/null && source <(argocd completion zsh)
 # Knative
 which kn >/dev/null && source <(kn completion zsh)
+# Krew
+export PATH="${PATH}:${HOME}/.krew/bin"
 
 # Utilities
 ###########
