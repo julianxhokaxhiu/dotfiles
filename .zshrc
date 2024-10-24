@@ -254,6 +254,8 @@ autoload zmv
 
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 if [ ! -z "${WSL_DISTRO_NAME}" ]; then
+  alias xdg-open="cmd.exe /c start"
+
   wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
 
   if [ ! -f "$wsl2_ssh_pageant_bin" ]; then
@@ -344,6 +346,8 @@ docker_run_macos() {
   MACOS_DISTRO="${1:-sonoma}"
   MACOS_LOCAL_PATH="$(realpath ~/.local)/dockur-macos/${MACOS_DISTRO}"
   MACOS_CONTAINER_PATH="/storage"
+
+  xdg-open http://localhost:8006/
 
   mkdir -p "$MACOS_LOCAL_PATH"
   docker run \
