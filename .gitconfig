@@ -1,24 +1,29 @@
-[core]
-  filemode = false
-  fsmonitor = true
-[user]
-  name = Julian Xhokaxhiu
-  email = info@julianxhokaxhiu.com
-[pull]
-  rebase = true
 [alias]
-  cleanup = "!git remote prune origin && git branch -vv | grep ': gone]' | grep -v '\\*' | awk '{ print $1; }' | xargs -r git branch -D"
-  deepclean = "!git clean -ffxd"
-  ice = "!git add . && git commit -m 'ICE' && git push origin ice/$(whoami)-$(date --rfc-3339=date)"
-  optimize = "!git repack -a -d -f --depth=250 --window=250" # See https://stackoverflow.com/a/5613380
-[review "review.lineageos.org"]
-  username = JulianXhokaxhiu
+	cleanup = "!git remote prune origin && git branch -vv | grep ': gone]' | grep -v '\\*' | awk '{ print $1; }' | xargs -r git branch -D"
+	deepclean = "!git clean -ffxd"
+	ice = "!git add . && git commit -m 'ICE' && git push origin ice/$(whoami)-$(date --rfc-3339=date)"
+	optimize = "!git repack -a -d -f --depth=250 --window=250" # See https://stackoverflow.com/a/5613380
+[branch]
+	autoSetupMerge = simple
 [color]
-  ui = auto
+	ui = auto
+[core]
+	autocrlf = false
+  filemode = false
+	editor = nano
+	longpaths = true
+	fsmonitor = true
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+[pull]
+	rebase = true
 [push]
-  autoSetupRemote = true
+	autoSetupRemote = true
+[review "review.lineageos.org"]
+	username = JulianXhokaxhiu
+[user]
+	name = Julian Xhokaxhiu
+	email = info@julianxhokaxhiu.com
