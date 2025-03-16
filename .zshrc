@@ -234,6 +234,12 @@ compact_vm_disk() {
   which vmware-toolbox-cmd >/dev/null && sudo vmware-toolbox-cmd disk shrinkonly
 }
 
+# Flush journalctl logs
+flush_vm_logs() {
+  sudo journalctl --flush --rotate --vacuum-time=1s
+  sudo journalctl --user --flush --rotate --vacuum-time=1s
+}
+
 # Cleanup NPM node_modules on the current working directory recursively
 cleanup_node_modules() {
   find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
