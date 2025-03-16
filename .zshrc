@@ -227,7 +227,7 @@ EOF
   sudo systemctl restart reflector.service
 }
 
-# Optimize disk on VMWare
+# Compacts the VM disk to the minimum size possible ( and shrinks the disk file if you're on VMWare) - Use this script if you're on WSL2: https://gist.github.com/julianxhokaxhiu/8fc7f4eafbaf5498e8265d26ccfcb552
 compact_vm_disk() {
   sudo e4defrag /
   dd if=/dev/zero of=wipefile bs=1M; sync; rm wipefile
