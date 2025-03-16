@@ -228,10 +228,10 @@ EOF
 }
 
 # Optimize disk on VMWare
-optimize_vmware_disk() {
+compact_vm_disk() {
   sudo e4defrag /
   dd if=/dev/zero of=wipefile bs=1M; sync; rm wipefile
-  sudo vmware-toolbox-cmd disk shrinkonly
+  which vmware-toolbox-cmd >/dev/null && sudo vmware-toolbox-cmd disk shrinkonly
 }
 
 # Cleanup NPM node_modules on the current working directory recursively
