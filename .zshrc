@@ -214,17 +214,9 @@ is_domain_available() {
 
 # Update Arch Mirrorlist based on the best ranked mirror for your current country ( IP Based )
 pacman_updatelist() {
-  COUNTRY=$(curl -s -L "http://ip-api.com/line/?fields=countryCode")
+  COUNTRY=$(curl -s -L "http://ip-api.com/line/?fields=country")
 
-  sudo tee /etc/xdg/reflector/reflector.conf >&/dev/null << EOF
---save /etc/pacman.d/mirrorlist
---protocol https
---country $COUNTRY,DE,US
---latest 5
---sort age
-EOF
-
-  sudo systemctl restart reflector.service
+  sudo ghostmirror -PoclLS $COUNTRY,Germany,Italy,France /etc/pacman.d/mirrorlist 30 state,outofdate,morerecent,ping
 }
 
 # Compacts the VM disk to the minimum size possible ( and shrinks the disk file if you're on VMWare) - Use this script if you're on WSL2: https://gist.github.com/julianxhokaxhiu/8fc7f4eafbaf5498e8265d26ccfcb552
