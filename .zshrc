@@ -371,7 +371,7 @@ docker_rm_macos() {
 
   if [ -d "${MACOS_LOCAL_PATH}" ]; then
     echo "Image for macOS ${MACOS_DISTRO} found. Removing..."
-    rm -rf "${MACOS_LOCAL_PATH}"
+    sudo rm -rf "${MACOS_LOCAL_PATH}"
   fi
 }
 
@@ -408,6 +408,6 @@ docker_rm_linux() {
 
   if [ -d "${LINUX_LOCAL_PATH}" ]; then
     echo "Image for linux ${LINUX_DISTRO} found. Removing..."
-    rm -rf "${LINUX_LOCAL_PATH}"
+    sudo rm -rf "${LINUX_LOCAL_PATH}"
   fi
 }
