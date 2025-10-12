@@ -374,3 +374,40 @@ docker_rm_macos() {
     rm -rf "${MACOS_LOCAL_PATH}"
   fi
 }
+
+### ====================================================================== ###
+
+# Run a Linux machine using docker
+# $1: the linux distro name ( arch, ubuntu, etc. ) See https://github.com/qemus/qemu#how-do-i-select-the-operating-system
+docker_run_linux() {
+  LINUX_DISTRO="${1:-arch}"
+  LINUX_LOCAL_PATH="$(realpath ~/.local)/qemux-qemu/${LINUX_DISTRO}"
+  LINUX_CONTAINER_PATH="/storage"
+
+  xdg-open http://localhost:8006/
+
+  mkdir -p "$LINUX_LOCAL_PATH"
+  docker run \
+    --rm=true \
+    -it \
+    --privileged \
+    --device=/dev/kvm \
+    --device=/dev/net/tun \
+    --stop-timeout 120 \
+    -p 8006:8006 \
+    -e "BOOT=${LINUX_DISTRO}" \
+    -v "${LINUX_LOCAL_PATH}:${LINUX_CONTAINER_PATH}" \
+    qemux/qemu
+}
+
+# Delete a current linux machine using docker
+# $1: the linux distro name ( arch, ubuntu, etc. ) See https://github.com/qemus/qemu#how-do-i-select-the-operating-system
+docker_rm_linux() {
+  LINUX_DISTRO="${1:-arch}"
+  LINUX_LOCAL_PATH="$(realpath ~/.local)/qemux-qemu/${LINUX_DISTRO}"
+
+  if [ -d "${LINUX_LOCAL_PATH}" ]; then
+    echo "Image for linux ${LINUX_DISTRO} found. Removing..."
+    rm -rf "${LINUX_LOCAL_PATH}"
+  fi
+}
