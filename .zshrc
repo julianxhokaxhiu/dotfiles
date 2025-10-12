@@ -341,7 +341,7 @@ disable_proxy() {
 docker_run_macos() {
   echo "Once you're done installing macOS, you can make the VM faster using some tricks you can find here: https://github.com/sickcodes/osx-optimizer"
 
-  MACOS_DISTRO="${1:-sonoma}"
+  MACOS_DISTRO="${1:-tahoe}"
   MACOS_LOCAL_PATH="$(realpath ~/.local)/dockur-macos/${MACOS_DISTRO}"
   MACOS_CONTAINER_PATH="/storage"
 
@@ -366,7 +366,7 @@ docker_run_macos() {
 # Delete a current macOS machine using docker
 # $1: the macos distro name ( big-sur, mojave, monterey, ventura, ... ). See https://github.com/dockur/macos?tab=readme-ov-file#how-do-i-select-the-macos-version
 docker_rm_macos() {
-  MACOS_DISTRO="${1:-sonoma}"
+  MACOS_DISTRO="${1:-tahoe}"
   MACOS_LOCAL_PATH="$(realpath ~/.local)/dockur-macos/${MACOS_DISTRO}"
 
   if [ -d "${MACOS_LOCAL_PATH}" ]; then
