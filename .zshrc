@@ -395,7 +395,9 @@ docker_run_linux() {
     --device=/dev/net/tun \
     --stop-timeout 120 \
     -p 8006:8006 \
+    -p 2222:22 \
     -e "BOOT=${LINUX_DISTRO}" \
+    -e "NETWORK=passt" \
     -v "${LINUX_LOCAL_PATH}:${LINUX_CONTAINER_PATH}" \
     qemux/qemu
 }
