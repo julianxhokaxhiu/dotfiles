@@ -413,3 +413,38 @@ docker_rm_linux() {
     sudo rm -rf "${LINUX_LOCAL_PATH}"
   fi
 }
+
+### ====================================================================== ###
+
+docker_run_android() {
+  echo "See https://github.com/Shmayro/dockerify-android/tree/main?tab=readme-ov-file#%EF%B8%8F-environment-variables for more configurations."
+
+  ANDROID_DISTRO="${1:-emulator_14.0}"
+  ANDROID_LOCAL_PATH="$(realpath ~/.local)/dockerify-android/${ANDROID_DISTRO}"
+
+  mkdir -p "$ANDROID_LOCAL_PATH"  
+  docker run \
+    --rm=true \
+    -itd \
+    --privileged \
+    --device /dev/kvm \
+    -e "RAM_SIZE=4096" \
+    -e "ROOT_SETUP=0" \
+    -e "GAPPS_SETUP=0" \
+    -p 5555:5555 \
+    -v "${ANDROID_LOCAL_PATH}/data:/data" \
+    -v "${ANDROID_LOCAL_PATH}/extras:/extras" \
+    shmayro/dockerify-android:latest
+
+  scrcpy -S localhost:5555
+}
+
+docker_rm_android() {
+  ANDROID_DISTRO="${1:-emulator_14.0}"
+  ANDROID_LOCAL_PATH="$(realpath ~/.local)/dockerify-android/${ANDROID_DISTRO}"
+
+  if [ -d "${ANDROID_LOCAL_PATH}" ]; then
+    echo "Image for android ${ANDROID_DISTRO} found. Removing..."
+    sudo rm -rf "${ANDROID_LOCAL_PATH}"
+  fi
+}
