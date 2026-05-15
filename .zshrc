@@ -176,9 +176,9 @@ export PATH="${PIPX_BIN_DIR}:$PATH"
 #####################
 
 # https://wiki.archlinux.org/index.php/Pacman/Tips_and_tricks#Removing_unused_packages_.28orphans.29
-alias pacman_clean_orphans="sudo pacman -Rns $(pacman -Qtdq | tr '\n' ' ' | xargs)"
+command -v pacman &>/dev/null && alias pacman_clean_orphans="sudo pacman -Rns $(pacman -Qtdq | tr '\n' ' ' | xargs)"
 # https://wiki.archlinux.org/index.php/Pacman/Tips_and_tricks#Database_access_speeds + AUR via pacaur
-alias pacman_clean_cache="yay -Sc"
+command -v yay &>/dev/null && alias pacman_clean_cache="yay -Sc"
 
 # asdf-vm
 #########
@@ -187,21 +187,19 @@ alias pacman_clean_cache="yay -Sc"
 # Kubernetes
 ############
 # KubeCtl
-which kubectl >/dev/null && source <(kubectl completion zsh) && export PATH="${PATH}:${HOME}/.krew/bin"
+command -v kubectl &>/dev/null && source <(kubectl completion zsh) && export PATH="${HOME}/.krew/bin:${PATH}"
 # KubeAdm
-which kubeadm >/dev/null && source <(kubeadm completion zsh)
+command -v kubeadm &>/dev/null && source <(kubeadm completion zsh)
 # Helm Package Manager
-which helm >/dev/null && source <(helm completion zsh)
+command -v helm &>/dev/null && source <(helm completion zsh)
 # Kind
-which kind >/dev/null && source <(kind completion zsh)
+command -v kind &>/dev/null && source <(kind completion zsh)
 # Tilt
-which tilt >/dev/null && source <(tilt completion zsh)
+command -v tilt &>/dev/null && source <(tilt completion zsh)
 # ArgoCD
-which argocd >/dev/null && source <(argocd completion zsh)
+command -v argocd &>/dev/null && source <(argocd completion zsh)
 # Knative
-which kn >/dev/null && source <(kn completion zsh)
-# Krew
-export PATH="${PATH}:${HOME}/.krew/bin"
+command -v kn &>/dev/null && source <(kn completion zsh)
 
 # Utilities
 ###########
