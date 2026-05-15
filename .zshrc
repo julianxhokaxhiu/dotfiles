@@ -458,3 +458,32 @@ docker_rm_android() {
     sudo rm -rf "${ANDROID_LOCAL_PATH}"
   fi
 }
+
+## --- macOS ---
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # keychain env vars helpers
+  source "${HOME}/.keychain-environment-variables.sh"
+
+  # brew
+  if command -v brew &>/dev/null; then
+    # Brew
+    eval "$(brew shellenv)"
+
+    # Brew GNU tools
+    export PATH="$(brew --prefix)/opt/make/libexec/gnubin:$PATH"
+
+    # Brew Python
+    export PATH="$(brew --prefix python)/libexec/bin:$PATH"
+
+    # Node.js
+    BREW_NODE_PREFIX=$(brew --prefix "$(brew list | grep -E '^node(@[0-9]+)?$' | tail -1)" 2>/dev/null)
+    export PATH="${BREW_NODE_PREFIX}/bin:$PATH"
+
+    # Google Cloud
+    source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/path.zsh.inc"
+  fi
+
+  # LM Studio CLI (lms)
+  export PATH="${HOME}/.lmstudio/bin:$PATH"
+fi
