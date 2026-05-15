@@ -161,6 +161,14 @@ export MANPATH="$NPM_PACKAGES/share/man:/usr/local/man:$MANPATH"
 export PNPM_HOME="${HOME}/.pnpm"
 export PATH="${PNPM_HOME}:$PATH"
 
+# pipx setup
+############
+
+export PIPX_HOME="${HOME}/.pipx"
+export PIPX_BIN_DIR="${PIPX_HOME}/bin"
+export PIPX_MAN_DIR="${PIPX_HOME}/share/man"
+export PATH="${PIPX_BIN_DIR}:$PATH"
+
 # make sure you run 'pnpm install-completion zsh' at least once
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && source ~/.config/tabtab/zsh/__tabtab.zsh || true
 
