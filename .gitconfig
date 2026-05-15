@@ -5,6 +5,8 @@
 	optimize = "!git repack -a -d -f --depth=250 --window=250" # See https://stackoverflow.com/a/5613380
 [branch]
 	autoSetupMerge = simple
+[credential]
+	helper = manager # https://github.com/git-ecosystem/git-credential-manager
 [color]
 	ui = auto
 [core]
