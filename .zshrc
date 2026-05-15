@@ -250,7 +250,7 @@ kill_kubernetes_terminating_pods() {
 # Bulk rename tool
 autoload zmv
 
-# https://github.com/BlackReloaded/wsl2-ssh-pageant
+# https://github.com/jryberg/wsl2-ssh-pageant
 if [ ! -z "${WSL_DISTRO_NAME}" ]; then
   alias xdg-open="cmd.exe /c start"
 
@@ -262,7 +262,9 @@ if [ ! -z "${WSL_DISTRO_NAME}" ]; then
     ubm_ensure_archlinux_package "socat"
     ubm_ensure_archlinux_package "ss"
     # install wsl2 ssh pageant daemon
-    wget -O "$wsl2_ssh_pageant_bin" "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe"
+    wget -O "$wsl2_ssh_pageant_bin.zip" "https://github.com/jryberg/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe.zip"
+    unzip "$wsl2_ssh_pageant_bin.zip"
+    rm "$wsl2_ssh_pageant_bin.zip"
     chmod +x "$wsl2_ssh_pageant_bin"
   fi
 
