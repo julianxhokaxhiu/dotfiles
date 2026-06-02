@@ -466,6 +466,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # brew
   if command -v brew &>/dev/null; then
     # Brew
+    export HOMEBREW_REQUIRE_TAP_TRUST=1
     eval "$(brew shellenv)"
 
     # Brew GNU tools
