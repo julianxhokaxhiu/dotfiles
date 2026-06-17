@@ -1,3 +1,6 @@
+# Compinit
+mattmc3/ez-compinit
+
 # Syntax highlighting
 zsh-users/zsh-syntax-highlighting
 

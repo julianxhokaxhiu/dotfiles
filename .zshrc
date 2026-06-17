@@ -1,5 +1,8 @@
 # ~/.zshrc
 
+# Enable to start measuring
+# zmodload zsh/zprof
+
 # helpers
 ##########
 
@@ -51,20 +54,6 @@ setopt EXTENDED_HISTORY
 
 # append history file
 setopt append_history
-
-# compinit
-###########
-
-# Load zsh compinit module
-autoload -Uz compinit
-if [ ! -f ~/.zcompdump ]; then
-  compinit
-elif [ $(date +'%j') != $(date -r ~/.zcompdump +'%j') ]; then
-  rm ~/.zcompdump
-  compinit
-else
-  compinit -C
-fi
 
 # Enable Tab highlight style
 zstyle ':completion:*' menu select
@@ -486,3 +475,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # LM Studio CLI (lms)
   export PATH="${HOME}/.lmstudio/bin:$PATH"
 fi
+
+# Enable to dump measurings
+# zprof
