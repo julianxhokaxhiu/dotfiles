@@ -197,7 +197,7 @@ alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
 
 is_domain_available() {
-  whois $1 | egrep -q \
+  whois $1 | grep -E -q \
     '^NOT FOUND|^not found|^No match|^AVAILABLE' 2>&1 >&/dev/null
 
   if [ $? -eq 0 ]; then
