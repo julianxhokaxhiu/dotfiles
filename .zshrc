@@ -216,8 +216,22 @@ pacman_updatelist() {
 
 # Compacts the VM disk to the minimum size possible ( and shrinks the disk file if you're on VMWare) - Use this script if you're on WSL2: https://gist.github.com/julianxhokaxhiu/8fc7f4eafbaf5498e8265d26ccfcb552
 compact_vm_disk() {
+  # clear cache files
+  rm -rf $HOME/.cache/*
+  npm cache clean --force
+  go clean -modcache
+
+  # gc all git repos
+  find . -type d -name .git -prune -print0 | xargs -0 -I{} sh -c 'd="{}"; repo="${d%/.git}"; echo "==> $repo"; cd "$repo" && git gc --prune'
+
+  # allow zsh to redownload plugins
+  rm .zsh_plugins.zsh
+
+  # defrag the disk
   sudo e4defrag /
   dd if=/dev/zero of=wipefile bs=1M; sync; rm wipefile
+
+  # compact disk if running in VMWare
   which vmware-toolbox-cmd >/dev/null && sudo vmware-toolbox-cmd disk shrinkonly
 }
 
