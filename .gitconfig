@@ -3,9 +3,9 @@
 	deepclean = "!git clean -ffxd"
 	ice = "!git add . && git commit -m 'ICE' && git push origin ice/$(whoami)-$(date --rfc-3339=date)"
 	optimize = "!git repack -a -d -f --depth=250 --window=250" # See https://stackoverflow.com/a/5613380
-	gh-actions-cleanup = '!f(){ local pattern="${1:?Usage: actions_cleanup <keep-pattern> <owner/repo>}"; local repo="${2:?Usage: actions_cleanup <keep-pattern> <owner/repo>}"; gh run list --repo "$repo" --limit 500 --json databaseId,name | jq -r --arg p "$pattern" '"'"'.[] | select(.name | contains($p) | not) | .databaseId'"'"' | tr -d '"'"'\r'"'"' | while read -r id; do echo "Deleting run $id..."; gh run delete --repo "$repo" "$id"; done; }; f "$@"'
-	gc-all = '!find . -type d -name .git -prune -print0 | xargs -0 -I{} sh -c '"'"'d="{}"; repo="${d%/.git}"; echo "==> $repo"; cd "$repo" && git gc --prune'"'"''
-	vcpkg-deepclean = '!find . -type d -name .git -prune -print0 | xargs -0 -I{} sh -c '"'"'gitdir="{}"; repo="${gitdir%/.git}"; vcpkg="$repo/vcpkg"; echo "==> $vcpkg"; if [ -d "$vcpkg" ] && { [ -f "$vcpkg/.git" ] || [ -d "$vcpkg/.git" ]; }; then (cd "$vcpkg" && git deepclean); fi'"'"''
+	gh-actions-cleanup = "!f(){ local pattern=\"${1:?Usage: actions_cleanup <keep-pattern> <owner/repo>}\"; local repo=\"${2:?Usage: actions_cleanup <keep-pattern> <owner/repo>}\"; gh run list --repo \"$repo\" --limit 500 --json databaseId,name | jq -r --arg p \"$pattern\" '.[] | select(.name | contains($p) | not) | .databaseId' | tr -d '\\r' | while read -r id; do echo \"Deleting run $id...\"; gh run delete --repo \"$repo\" \"$id\"; done; }; f \"$@\""
+	gc-all = "!find . -type d -name .git -prune -print0 | xargs -0 -I{} sh -c 'd=\"{}\"; repo=\"${d%/.git}\"; echo \"==> $repo\"; cd \"$repo\" && git gc --prune'"
+	vcpkg-deepclean = "!find . -type d -name .git -prune -print0 | xargs -0 -I{} sh -c 'gitdir=\"{}\"; repo=\"${gitdir%/.git}\"; vcpkg=\"$repo/vcpkg\"; echo \"==> $vcpkg\"; if [ -d \"$vcpkg\" ] && { [ -f \"$vcpkg/.git\" ] || [ -d \"$vcpkg/.git\" ]; }; then (cd \"$vcpkg\" && git deepclean); fi'"
 [branch]
 	autoSetupMerge = simple
 [credential]
