@@ -484,6 +484,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
     # Google Cloud
     source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/path.zsh.inc"
+
+    # Helpers
+    alias brew_cleanup='tmp=$(mktemp -d) && trap "rm -rf \"$tmp\"" EXIT && brew bundle dump --force --file="$tmp/Brewfile" && brew bundle cleanup --force --file="$tmp/Brewfile"'
   fi
 
   # LM Studio CLI (lms)
