@@ -218,21 +218,23 @@ pacman_updatelist() {
 compact_vm_disk() {
   # clear cache files
   rm -rf $HOME/.cache/*
-  npm cache clean --force
-  go clean -modcache
+  command -v npm &>/dev/null && npm cache clean --force
+  command -v go &>/dev/null && go clean -modcache
 
   # gc all git repos
-  find . -type d -name .git -prune -print0 | xargs -0 -I{} sh -c 'd="{}"; repo="${d%/.git}"; echo "==> $repo"; cd "$repo" && git gc --prune'
+  command -v git &>/dev/null && git gc-all
 
   # allow zsh to redownload plugins
   rm .zsh_plugins.zsh
 
   # defrag the disk
-  sudo e4defrag /
-  dd if=/dev/zero of=wipefile bs=1M; sync; rm wipefile
+  if [[ "$(uname -s)" == Linux ]]; then
+    sudo e4defrag /
+    dd if=/dev/zero of=wipefile bs=1M; sync; rm wipefile
+  fi
 
   # compact disk if running in VMWare
-  which vmware-toolbox-cmd >/dev/null && sudo vmware-toolbox-cmd disk shrinkonly
+  command -v vmware-toolbox-cmd &>/dev/null && sudo vmware-toolbox-cmd disk shrinkonly
 }
 
 # Flush journalctl logs
