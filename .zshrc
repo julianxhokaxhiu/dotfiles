@@ -484,15 +484,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     BREW_NODE_PREFIX=$(brew --prefix "$(brew list | grep -E '^node(@[0-9]+)?$' | tail -1)" 2>/dev/null)
     export PATH="${BREW_NODE_PREFIX}/bin:$PATH"
 
-    # Google Cloud
-    source "$(brew --prefix)/Caskroom/gcloud-cli/latest/google-cloud-sdk/path.zsh.inc"
-
     # Helpers
     alias brew_cleanup='tmp=$(mktemp -d) && trap "rm -rf \"$tmp\"" EXIT && brew bundle dump --force --file="$tmp/Brewfile" && brew bundle cleanup --force --file="$tmp/Brewfile"'
   fi
-
-  # LM Studio CLI (lms)
-  export PATH="${HOME}/.lmstudio/bin:$PATH"
 fi
 
 # Enable to dump measurings
